@@ -8,4 +8,9 @@ bool stringEquals(const char* a, const char* b);
 void printHeader(const char* title);
 void clearScreen();
 
+bool parseIntToken(const char* tok,int& out);
+bool parseRoomToken(const char* tok,int& floor,int& room);
+int tokenizeLine(char* line,char* tokens[],int maxTokens);
+
+
 #endif // UTIL_H
