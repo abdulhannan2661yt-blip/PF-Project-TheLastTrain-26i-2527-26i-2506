@@ -1,32 +1,48 @@
 #include "switches.h"
+#include "physics.h"
+#include "util.h"
+#include <cstring>
+using namespace std;
 
-// TODO: Lift 1 only works between floor 1 and floor 2
 bool canUseLift1(int fromFloor,int toFloor)
 {
-return false;
+    bool fromOk=(fromFloor==1 || fromFloor==2);
+    bool toOk=(toFloor==1 || toFloor==2);
+    return fromOk && toOk &&fromFloor!=toFloor;
 }
 
-// TODO: Lift 2 links floors 2, 4 and 5; needs lift2Operational or emergency trips left
 bool canUseLift2(int fromFloor,int toFloor,bool lift2Operational,int emergencyTripsLeft)
 {
-return false;
+    bool fromOk=(fromFloor==2 || fromFloor==4 || fromFloor==5);
+    bool toOk=(toFloor==2 || toFloor==4 || toFloor==5);
+    if (!fromOk||!toOk||fromFloor==toFloor)
+        return false;
+    return lift2Operational||emergencyTripsLeft > 0;
 }
 
-// TODO: return true if the Master Key is in the inventory
 bool unlockFloor3Door(const char inventory[MAX_INVENTORY_CAPACITY],int inventoryCount)
 {
-return false;
+    return hasItem(inventory, inventoryCount, ENT_MASTER_KEY);
 }
 
-// TODO: remove the fuse from the inventory, mark it installed, add score
-bool installFuseControlPanel(char inventory[MAX_INVENTORY_CAPACITY],int& inventoryCount,
-bool objectives[NUM_OBJECTIVES],int& score)
+bool installFuseControlPanel(char inventory[MAX_INVENTORY_CAPACITY],int& inventoryCount,bool objectives[NUM_OBJECTIVES],int& score)
 {
-return false;
+    if (objectives[OBJ_FUSE_INSTALLED])
+        if (!hasItem(inventory, inventoryCount, ENT_FUSE))
+            return false;
+    removeItem(inventory, inventoryCount, ENT_FUSE);
+    objectives[OBJ_FUSE_INSTALLED] = true;
+    applyScoreDelta(score, SCORE_INSTALL_FUSE);
+    
+    if (hasItem(inventory, inventoryCount, ENT_LIFT_PASS)) {
+        objectives[OBJ_LIFT2_ACTIVE] = true;
+    }
+    return true;
 }
-
-// TODO: code must be "427" and all three clues must be found
 bool verifyCabinetCode(const char* enteredCode,const bool objectives[NUM_OBJECTIVES])
 {
-return false;
+    if (enteredCode == nullptr)
+     return false;
+    if (!objectives[OBJ_CLUE_4] || !objectives[OBJ_CLUE_2] || !objectives[OBJ_CLUE_7]) return false;
+    return strcmp(enteredCode, "427")==0;
 }

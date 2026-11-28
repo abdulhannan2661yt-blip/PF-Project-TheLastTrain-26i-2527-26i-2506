@@ -22,7 +22,7 @@ int main() {
     // Building Connectivity & Entity Parallel Matrices
     char horizontalConn[NUM_FLOORS][ROOMS_PER_FLOOR - 1];
     char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM];
-    int entityCounts[NUM_FLOORS][ROOMS_PER_FLOOR] = { 0 };
+    int entityCounts[NUM_FLOORS][ROOMS_PER_FLOOR] = {};
 
     const char* mapFile = "data/building.txt";
     const char* initStateFile = "data/initial-state.txt";
