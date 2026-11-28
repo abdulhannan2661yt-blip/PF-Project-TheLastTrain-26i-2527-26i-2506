@@ -23,5 +23,6 @@ bool loadGameStateFromFile(const char* filename,
 void writeGameSummaryReport(const char* filename,
                             int score, int remainingEnergy, int remainingTime,
                             const bool objectives[NUM_OBJECTIVES], bool victory);
+void logAuditEntry(const char* action,int energy,int time,int score);
 
 #endif // LOGGER_H

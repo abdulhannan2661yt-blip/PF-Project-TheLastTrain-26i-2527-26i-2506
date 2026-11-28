@@ -209,22 +209,24 @@ bool parseMapLines(char** lines,int lineCount,char horizontalConn[NUM_FLOORS][RO
             for(int r=1; r<=ROOMS_PER_FLOOR; r++){
                 int from=plusCols[r-1]+1;
                 int to=plusCols[r]-1;
-                for(int c=from; c<=to && c<itemLen; c++){
-                    char sym=itemLine[c];
-                    if(sym==' ' || sym=='|'){
+                for(int c= from;c<=to;c++)
+                {
+                    if(c>=itemLen)
+                        break;
+                    char ch =itemLine[c];
+                    if (ch == ' ' || ch == '|')
                         continue;
-                    }
-                    if(!isKnownEntity(sym)){
-                        cout << "Map error: unknown symbol" << sym <<" i F" << floor<< "-R" << r << endl;
+                    if(!isKnownEntity(ch))
+                    {
+                        cout<<"Map error:unknown symbol "<< ch <<" in F" << floor << "-R" << r << endl;
                         return false;
                     }
-                    int copies=1;
-                    if(sym==ENT_ENERGY_PACK){
-                        copies=2;
-                    }
-                    for(int k=0;k<copies; k++){
-                        if(!addEntity(roomEntities,entityCounts,floor-1,r-1,sym)){
-                            cout << "Map error: too many item in F" << floor << "-R" << r << endl;
+                    int count = 1;
+                    if (ch == ENT_ENERGY_PACK) count = 2;
+                    for (int k = 0; k< count; k++) {
+                        bool ok = addEntity(roomEntities, entityCounts, floor - 1, r - 1, ch);
+                        if (!ok) {
+                            cout << "Map error: too many items in F" << floor << "-R" << r << endl;
                             return false;
                         }
                     }
@@ -241,47 +243,52 @@ bool parseMapLines(char** lines,int lineCount,char horizontalConn[NUM_FLOORS][RO
     return true;
 }
 bool loadBuildingMap(const char* filename,char horizontalConn[NUM_FLOORS][ROOMS_PER_FLOOR-1],char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM],int entityCounts[NUM_FLOORS][ROOMS_PER_FLOOR])
-{
-ifstream file(filename);
-if(!file.is_open()){
+    {
+    ifstream file(filename);
+      if(!file.is_open()){
 cout<<"Error: cannot open "<<filename<<endl;
 return false;
-}
+     }
 const int MAX_MAP_LINES=60;
 char** lines=new char*[MAX_MAP_LINES];
 int lineCount=0;
-char buffer[MAX_LINE_LEN];
+  char buffer[MAX_LINE_LEN];
 while(lineCount<MAX_MAP_LINES&&file.getline(buffer,MAX_LINE_LEN)){
 int len=lineLength(buffer);
 while(len>0&&(buffer[len-1]=='\r'||buffer[len-1]=='\n')){
 len--;
 buffer[len]='\0';
-}
+  }
 lines[lineCount]=new char[len+1];
-for(int k=0;k<=len;k++){
+for(int k=0;k<=len;k++)
+{
 lines[lineCount][k]=buffer[k];
 }
 lineCount++;
     }
 file.close();
 bool ok=parseMapLines(lines,lineCount,horizontalConn,roomEntities,entityCounts);
-for(int i=0;i<lineCount;i++){
+for(int i=0;i<lineCount;i++)
+{
 delete[] lines[i];
    }
 delete[] lines;
 return ok;
-}
+    }
 
 bool readYesNo(const char* value,bool& out)
 {
-if(value==nullptr){
+if(value==nullptr)
+ {
 return false;
 }
-if(stringEquals(value,"YES")||stringEquals(value,"TRUE")){
+if(stringEquals(value,"YES")||stringEquals(value,"TRUE"))
+{
 out=true;
 return true;
 }
-if(stringEquals(value,"NO")||stringEquals(value,"FALSE")){
+if(stringEquals(value,"NO")||stringEquals(value,"FALSE"))
+{
 out=false;
 return true;
 }
@@ -312,14 +319,15 @@ const int FLAG_COUNT=7;
 const char* flagKeys[FLAG_COUNT]={"PASSENGER_RESCUED","CAT_RESCUED","CABINET_UNLOCKED","TRAIN_KEY_COLLECTED","FUSE_INSTALLED","LIFT_PASS_COLLECTED","TRAIN_PREPARED"};
 int flagIndex[FLAG_COUNT]={OBJ_PASSENGER_RESCUED,OBJ_CAT_SECURED,OBJ_CABINET_UNLOCKED,OBJ_TRAIN_KEY,OBJ_FUSE_INSTALLED,OBJ_LIFT_PASS,OBJ_TRAIN_PREPARED};
 for(int k=0;k<FLAG_COUNT;k++){
-if(stringEquals(key,flagKeys[k])){
+if(stringEquals(key,flagKeys[k]))
+{
 bool answer=false;
 valid=readYesNo(value,answer);
 if(valid){
 objectives[flagIndex[k]]=answer;
 }
 return true;
-}
+     }
 }
 return false;
 }
