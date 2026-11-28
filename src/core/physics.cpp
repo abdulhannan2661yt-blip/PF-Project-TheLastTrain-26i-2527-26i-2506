@@ -1,6 +1,6 @@
 #include "physics.h"
 #include "util.h"
-using namespace std;
+
 
 static bool IsInRange(int Floor, int Room)
 {
