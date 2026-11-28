@@ -1,5 +1,6 @@
 #include "physics.h"
 #include "util.h"
+using namespace std;
 
 // TODO: check if two rooms are connected (door, window, locked door, stairs, lift) and store the type in outConnType
 bool isDirectlyConnected(int fromF,int fromR,int toF,int toR,
