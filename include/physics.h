@@ -3,6 +3,9 @@
 
 #include "state.h"
 
+const char CONN_STAIRS = 'S';
+const char CONN_LIFT1  = '1';
+const char CONN_LIFT2  = '2';
 // Movement validation, connectivity & resource adjustments
 bool isDirectlyConnected(int fromF, int fromR, int toF, int toR,
                          const char horizontalConn[NUM_FLOORS][ROOMS_PER_FLOOR - 1],
